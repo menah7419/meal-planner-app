@@ -4,6 +4,7 @@ import RegisterPage from './pages/RegisterPage';
 import Dashboard from './pages/Dashboard';
 import PantryPage from './pages/PantryPage';
 import MealPlanPage from './pages/MealPlanPage';
+import CommunityPage from './pages/CommunityPage';
 
 function App() {
   return (
@@ -14,8 +15,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/pantry" element={<PantryPage />} />
         <Route path="/meal-plan" element={<MealPlanPage />} />
+        <Route path="/community" element={<CommunityPage />} />
         <Route path="/recipes" element={<h1>Recipes Coming Soon</h1>} />
-        <Route path="/community" element={<h1>Community Coming Soon</h1>} />
       </Routes>
     </BrowserRouter>
   );

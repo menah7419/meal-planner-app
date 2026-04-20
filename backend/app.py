@@ -20,10 +20,12 @@ jwt = JWTManager(app)
 from routes.auth import auth_bp
 from routes.meals import meals_bp
 from routes.pantry import pantry_bp
+from routes.community import community_bp
 
 app.register_blueprint(auth_bp, url_prefix='/api/auth')
 app.register_blueprint(meals_bp, url_prefix='/api/meals')
 app.register_blueprint(pantry_bp, url_prefix='/api/pantry')
+app.register_blueprint(community_bp, url_prefix='/api/community')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

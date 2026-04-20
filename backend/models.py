@@ -34,3 +34,12 @@ class MealPlanEntry(db.Model):
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
     entry_date = db.Column(db.Date, nullable=False)
     meal_type = db.Column(db.String(20), nullable=False)
+
+class CommunityPost(db.Model):
+    __tablename__ = 'community_posts'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    title = db.Column(db.String(150), nullable=False)
+    description = db.Column(db.Text)
+    likes = db.Column(db.Integer, default=0)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
