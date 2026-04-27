@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import PantryPage from './pages/PantryPage';
 import MealPlanPage from './pages/MealPlanPage';
 import CommunityPage from './pages/CommunityPage';
+import RecipeSearchPage from './pages/RecipeSearchPage';
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
         <Route path="/pantry" element={<PantryPage />} />
         <Route path="/meal-plan" element={<MealPlanPage />} />
         <Route path="/community" element={<CommunityPage />} />
-        <Route path="/recipes" element={<h1>Recipes Coming Soon</h1>} />
+        <Route path="/recipes" element={<RecipeSearchPage />} />
       </Routes>
     </BrowserRouter>
   );
