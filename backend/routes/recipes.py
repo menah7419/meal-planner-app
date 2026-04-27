@@ -44,3 +44,32 @@ def search_recipes():
         })
     
     return jsonify(results)
+
+@recipes_bp.route('/detail/<int:recipe_id>', methods=['GET'])
+@jwt_required()
+def get_recipe_detail(recipe_id):
+    api_key = os.getenv('SPOONACULAR_API_KEY')
+    
+    url = f'https://api.spoonacular.com/recipes/{recipe_id}/information'
+    params = {
+        'apiKey': api_key,
+        'includeNutrition': False
+    }
+    
+    response = requests.get(url, params=params)
+    data = response.json()
+    
+    ingredients = []
+    for ing in data.get('extendedIngredients', []):
+        ingredients.append(ing.get('original', ''))
+    
+    instructions = []
+    analyzed = data.get('analyzedInstructions', [])
+    if analyzed:
+        for step in analyzed[0].get('steps', []):
+            instructions.append(step.get('step', ''))
+    
+    return jsonify({
+        'ingredients': ingredients,
+        'instructions': instructions
+    })
