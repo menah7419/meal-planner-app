@@ -33,7 +33,6 @@ app.register_blueprint(recipes_bp, url_prefix='/api/recipes')
 with app.app_context():
     import models
     db.create_all()
-    print('Database tables created!')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
