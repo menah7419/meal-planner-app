@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from database import db
-from datetime import datetime
 
 community_bp = Blueprint('community', __name__)
 
@@ -14,6 +13,7 @@ def get_posts():
         'id': post.id,
         'title': post.title,
         'description': post.description,
+        'image_url': post.image_url,
         'created_at': str(post.created_at)
     } for post in posts])
 
@@ -26,7 +26,8 @@ def create_post():
     post = CommunityPost(
         user_id=user_id,
         title=data['title'],
-        description=data.get('description', '')
+        description=data.get('description', ''),
+        image_url=data.get('image_url', '')
     )
     db.session.add(post)
     db.session.commit()
