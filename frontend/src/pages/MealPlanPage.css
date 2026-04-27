@@ -1,0 +1,75 @@
+.mealplan-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 40px;
+}
+
+.mealplan-table-wrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.mealplan-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.mealplan-table th {
+  padding: 18px 16px !important;
+  font-size: 15px !important;
+  min-width: 140px;
+}
+
+.mealplan-table td {
+  padding: 0 !important;
+  min-width: 140px;
+  height: 90px;
+  vertical-align: top;
+}
+
+.mealplan-meal-label {
+  padding: 16px !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  background: #E8F5E9 !important;
+  color: #1B5E20 !important;
+  min-width: 110px !important;
+}
+
+.mealplan-cell {
+  padding: 12px;
+  cursor: pointer;
+  height: 90px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.mealplan-cell-filled {
+  background: #F1F8E9 !important;
+}
+
+.mealplan-cell-text {
+  font-size: 13px;
+  color: #1B5E20;
+  line-height: 1.4;
+}
+
+.mealplan-cell-empty {
+  font-size: 20px;
+  color: #C8E6C9;
+}
+
+.mealplan-input {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+.mealplan-save-btn {
+  margin-top: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+}

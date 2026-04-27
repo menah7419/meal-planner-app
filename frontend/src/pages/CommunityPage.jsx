@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import API_BASE from '../services/api';
+import './CommunityPage.css';
 
 const CLOUDINARY_CLOUD = 'dpqoe4jkf';
 const CLOUDINARY_PRESET = 'nutriplan_uploads';
@@ -30,9 +31,7 @@ function CommunityPage() {
     try {
       const res = await axios.get(`${API_BASE}/api/community/`, { headers: getHeaders() });
       setPosts(res.data);
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) { console.error(err); }
   }
 
   function handleImageChange(e) {
@@ -60,74 +59,66 @@ function CommunityPage() {
     setUploading(true);
     try {
       let imageUrl = '';
-      if (image) {
-        imageUrl = await uploadToCloudinary();
-      }
+      if (image) { imageUrl = await uploadToCloudinary(); }
       await axios.post(`${API_BASE}/api/community/`, {
-        title,
-        description,
-        image_url: imageUrl
+        title, description, image_url: imageUrl
       }, { headers: getHeaders() });
-      setTitle('');
-      setDescription('');
-      setImage(null);
-      setImagePreview('');
+      setTitle(''); setDescription(''); setImage(null); setImagePreview('');
       fetchPosts();
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) { console.error(err); }
     setUploading(false);
   }
 
   return (
-    <div style={{ maxWidth: '800px', margin: '40px auto', padding: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>NutriPlan</h1>
+    <div>
+      <div className="header">
+        <h1>🌿 NutriPlan</h1>
         <button onClick={() => navigate('/dashboard')}>← Dashboard</button>
       </div>
-      <h2>👥 Community</h2>
 
-      <form onSubmit={sharePost} style={{ background: '#F1F8E9', padding: '20px', borderRadius: '8px', marginBottom: '20px' }}>
-        <h3>Share a Meal Plan</h3>
-        <div style={{ marginBottom: '10px' }}>
-          <label>Title</label><br/>
-          <input value={title} onChange={e => setTitle(e.target.value)} required />
-        </div>
-        <div style={{ marginBottom: '10px' }}>
-          <label>Description</label><br/>
-          <textarea value={description} onChange={e => setDescription(e.target.value)}
-            style={{ height: '80px' }} />
-        </div>
-        <div style={{ marginBottom: '10px' }}>
-          <label>Add a Photo (optional)</label><br/>
-          <input type="file" accept="image/*" onChange={handleImageChange}
-            style={{ border: 'none', padding: '0', marginTop: '6px' }} />
-          {imagePreview && (
-            <img src={imagePreview} alt="Preview"
-              style={{ width: '100%', maxHeight: '200px', objectFit: 'cover',
-                borderRadius: '8px', marginTop: '10px' }} />
-          )}
-        </div>
-        <button type="submit" disabled={uploading}>
-          {uploading ? 'Sharing...' : 'Share'}
-        </button>
-      </form>
+      <div className="community-container">
+        <h2 style={{ marginBottom: '8px' }}>👥 Community</h2>
+        <p style={{ color: '#666', marginBottom: '24px' }}>Share and discover meal plans</p>
 
-      <h3>Community Posts</h3>
-      {posts.length === 0 && <p>No posts yet — be the first to share!</p>}
-      {posts.map(post => (
-        <div key={post.id} style={{ border: '1px solid #C8E6C9', borderRadius: '8px',
-          padding: '16px', marginBottom: '12px', backgroundColor: 'white' }}>
-          <h4 style={{ margin: '0 0 8px 0' }}>{post.title}</h4>
-          {post.image_url && (
-            <img src={post.image_url} alt={post.title}
-              style={{ width: '100%', maxHeight: '300px', objectFit: 'cover',
-                borderRadius: '8px', marginBottom: '10px' }} />
-          )}
-          <p style={{ color: '#666', margin: '0 0 8px 0' }}>{post.description}</p>
-          <small style={{ color: '#999' }}>Shared on {post.created_at}</small>
-        </div>
-      ))}
+        <form onSubmit={sharePost} className="community-form">
+          <h3 style={{ marginBottom: '16px' }}>Share a Meal Plan</h3>
+          <div className="community-form-field">
+            <label>Title</label>
+            <input value={title} onChange={e => setTitle(e.target.value)} required />
+          </div>
+          <div className="community-form-field">
+            <label>Description</label>
+            <textarea value={description} onChange={e => setDescription(e.target.value)}
+              style={{ height: '80px' }} />
+          </div>
+          <div className="community-form-field">
+            <label>Add a Photo (optional)</label>
+            <input type="file" accept="image/*" onChange={handleImageChange}
+              style={{ border: 'none', padding: '0', marginTop: '6px' }} />
+            {imagePreview && (
+              <img src={imagePreview} alt="Preview"
+                style={{ width: '100%', maxHeight: '200px', objectFit: 'cover',
+                  borderRadius: '8px', marginTop: '10px' }} />
+            )}
+          </div>
+          <button type="submit" disabled={uploading}>
+            {uploading ? 'Sharing...' : 'Share'}
+          </button>
+        </form>
+
+        <h3 style={{ marginBottom: '16px' }}>Community Posts</h3>
+        {posts.length === 0 && <p style={{ color: '#666' }}>No posts yet — be the first to share!</p>}
+        {posts.map(post => (
+          <div key={post.id} className="community-post">
+            <div className="community-post-title">{post.title}</div>
+            {post.image_url && (
+              <img src={post.image_url} alt={post.title} className="community-post-image" />
+            )}
+            <p className="community-post-desc">{post.description}</p>
+            <small className="community-post-date">Shared on {post.created_at}</small>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

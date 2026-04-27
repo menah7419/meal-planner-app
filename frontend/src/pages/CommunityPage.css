@@ -1,0 +1,61 @@
+.community-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px 40px;
+}
+
+.community-form {
+  background: #F1F8E9;
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  border: 1px solid #C8E6C9;
+}
+
+.community-form label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1B5E20;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.community-form-field {
+  margin-bottom: 14px;
+}
+
+.community-post {
+  background: white;
+  border: 1px solid #C8E6C9;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.community-post-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1B5E20;
+  margin-bottom: 8px;
+}
+
+.community-post-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.community-post-desc {
+  color: #555;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.community-post-date {
+  color: #999;
+  font-size: 12px;
+}

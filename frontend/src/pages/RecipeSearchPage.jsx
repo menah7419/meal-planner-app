@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import API_BASE from '../services/api';
+import './RecipeSearchPage.css';
 
 function RecipeSearchPage() {
   const [query, setQuery] = useState('');
@@ -27,9 +28,7 @@ function RecipeSearchPage() {
         headers: getHeaders()
       });
       setResults(res.data);
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) { console.error(err); }
     setLoading(false);
   }
 
@@ -41,9 +40,7 @@ function RecipeSearchPage() {
         headers: getHeaders()
       });
       setRecipeDetail(res.data);
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) { console.error(err); }
     setLoadingDetail(false);
   }
 
@@ -53,103 +50,84 @@ function RecipeSearchPage() {
   }
 
   return (
-    <div style={{ maxWidth: '900px', margin: '40px auto', padding: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>NutriPlan</h1>
+    <div>
+      <div className="header">
+        <h1>🌿 NutriPlan</h1>
         <button onClick={() => navigate('/dashboard')}>← Dashboard</button>
       </div>
-      <h2>📖 Recipe Search</h2>
 
-      <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-        <input
-          value={query}
-          onChange={e => setQuery(e.target.value)}
-          placeholder="Search for recipes... (e.g. chicken, pasta, salad)"
-          style={{ flex: 1 }}
-        />
-        <button type="submit">Search</button>
-      </form>
+      <div className="recipes-container">
+        <h2 style={{ marginBottom: '8px' }}>📖 Recipe Search</h2>
+        <p style={{ color: '#666', marginBottom: '24px' }}>Search thousands of recipes with nutrition info</p>
 
-      {loading && <p>Searching recipes... 🔍</p>}
+        <form onSubmit={handleSearch} className="recipes-search-form">
+          <input value={query} onChange={e => setQuery(e.target.value)}
+            placeholder="Search recipes... (e.g. chicken, pasta, salad)"
+            style={{ flex: 1 }} />
+          <button type="submit">Search</button>
+        </form>
 
-      {!loading && searched && results.length === 0 && (
-        <p>No recipes found. Try a different search!</p>
-      )}
+        {loading && <p style={{ color: '#666' }}>Searching recipes... 🔍</p>}
+        {!loading && searched && results.length === 0 && (
+          <p style={{ color: '#666' }}>No recipes found. Try a different search!</p>
+        )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px' }}>
-        {results.map(recipe => (
-          <div key={recipe.id}
-            onClick={() => handleRecipeClick(recipe)}
-            style={{ border: '1px solid #C8E6C9', borderRadius: '8px', overflow: 'hidden',
-              cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s',
-              backgroundColor: 'white' }}
-            onMouseEnter={e => {
-              e.currentTarget.style.transform = 'translateY(-4px)';
-              e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.1)';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}>
-            {recipe.image && (
-              <img src={recipe.image} alt={recipe.title}
-                style={{ width: '100%', height: '180px', objectFit: 'cover' }} />
-            )}
-            <div style={{ padding: '12px' }}>
-              <h4 style={{ margin: '0 0 8px 0' }}>{recipe.title}</h4>
-              <p style={{ margin: '0 0 8px 0', color: '#666', fontSize: '14px' }}>
-                ⏱ {recipe.readyInMinutes} mins | 🍽️ {recipe.servings} servings
-              </p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', fontSize: '13px' }}>
-                <span>🔥 {recipe.calories} cal</span>
-                <span>💪 {recipe.protein}g protein</span>
-                <span>🍞 {recipe.carbs}g carbs</span>
-                <span>🥑 {recipe.fat}g fat</span>
+        <div className="recipes-grid">
+          {results.map(recipe => (
+            <div key={recipe.id} className="recipe-card" onClick={() => handleRecipeClick(recipe)}>
+              {recipe.image && (
+                <img src={recipe.image} alt={recipe.title} className="recipe-card-image" />
+              )}
+              <div className="recipe-card-body">
+                <div className="recipe-card-title">{recipe.title}</div>
+                <div className="recipe-card-meta">
+                  ⏱ {recipe.readyInMinutes} mins | 🍽️ {recipe.servings} servings
+                </div>
+                <div className="recipe-card-nutrition">
+                  <span>🔥 {recipe.calories} cal</span>
+                  <span>💪 {recipe.protein}g protein</span>
+                  <span>🍞 {recipe.carbs}g carbs</span>
+                  <span>🥑 {recipe.fat}g fat</span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {selectedRecipe && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 1000,
-          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
-          onClick={closeModal}>
-          <div style={{ backgroundColor: 'white', borderRadius: '12px', maxWidth: '700px',
-            width: '100%', maxHeight: '85vh', overflowY: 'auto', padding: '24px' }}
-            onClick={e => e.stopPropagation()}>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+        <div className="recipe-modal-overlay" onClick={closeModal}>
+          <div className="recipe-modal" onClick={e => e.stopPropagation()}>
+            <div className="recipe-modal-header">
               <h2 style={{ margin: 0 }}>{selectedRecipe.title}</h2>
-              <button onClick={closeModal} style={{ background: '#e74c3c', padding: '6px 12px' }}>✕ Close</button>
+              <button className="recipe-close-btn" onClick={closeModal}>✕ Close</button>
             </div>
 
             {selectedRecipe.image && (
               <img src={selectedRecipe.image} alt={selectedRecipe.title}
-                style={{ width: '100%', height: '250px', objectFit: 'cover', borderRadius: '8px', marginBottom: '16px' }} />
+                className="recipe-modal-image" />
             )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '10px', marginBottom: '16px' }}>
-              <div style={{ background: '#E8F5E9', padding: '10px', borderRadius: '8px', textAlign: 'center' }}>
-                <div style={{ fontSize: '20px' }}>🔥</div>
-                <div style={{ fontWeight: 'bold' }}>{selectedRecipe.calories}</div>
-                <div style={{ fontSize: '12px', color: '#666' }}>calories</div>
+            <div className="recipe-modal-nutrition">
+              <div className="recipe-nutrition-card">
+                <div className="recipe-nutrition-icon">🔥</div>
+                <div className="recipe-nutrition-value">{selectedRecipe.calories}</div>
+                <div className="recipe-nutrition-label">calories</div>
               </div>
-              <div style={{ background: '#E8F5E9', padding: '10px', borderRadius: '8px', textAlign: 'center' }}>
-                <div style={{ fontSize: '20px' }}>💪</div>
-                <div style={{ fontWeight: 'bold' }}>{selectedRecipe.protein}g</div>
-                <div style={{ fontSize: '12px', color: '#666' }}>protein</div>
+              <div className="recipe-nutrition-card">
+                <div className="recipe-nutrition-icon">💪</div>
+                <div className="recipe-nutrition-value">{selectedRecipe.protein}g</div>
+                <div className="recipe-nutrition-label">protein</div>
               </div>
-              <div style={{ background: '#E8F5E9', padding: '10px', borderRadius: '8px', textAlign: 'center' }}>
-                <div style={{ fontSize: '20px' }}>🍞</div>
-                <div style={{ fontWeight: 'bold' }}>{selectedRecipe.carbs}g</div>
-                <div style={{ fontSize: '12px', color: '#666' }}>carbs</div>
+              <div className="recipe-nutrition-card">
+                <div className="recipe-nutrition-icon">🍞</div>
+                <div className="recipe-nutrition-value">{selectedRecipe.carbs}g</div>
+                <div className="recipe-nutrition-label">carbs</div>
               </div>
-              <div style={{ background: '#E8F5E9', padding: '10px', borderRadius: '8px', textAlign: 'center' }}>
-                <div style={{ fontSize: '20px' }}>🥑</div>
-                <div style={{ fontWeight: 'bold' }}>{selectedRecipe.fat}g</div>
-                <div style={{ fontSize: '12px', color: '#666' }}>fat</div>
+              <div className="recipe-nutrition-card">
+                <div className="recipe-nutrition-icon">🥑</div>
+                <div className="recipe-nutrition-value">{selectedRecipe.fat}g</div>
+                <div className="recipe-nutrition-label">fat</div>
               </div>
             </div>
 
@@ -161,17 +139,16 @@ function RecipeSearchPage() {
 
             {recipeDetail && (
               <div>
-                <h3>Ingredients</h3>
-                <ul style={{ paddingLeft: '20px', marginBottom: '16px' }}>
+                <h3 style={{ marginBottom: '12px' }}>Ingredients</h3>
+                <ul style={{ paddingLeft: '20px', marginBottom: '20px' }}>
                   {recipeDetail.ingredients.map((ing, i) => (
-                    <li key={i} style={{ marginBottom: '4px' }}>{ing}</li>
+                    <li key={i} style={{ marginBottom: '6px', fontSize: '14px' }}>{ing}</li>
                   ))}
                 </ul>
-
-                <h3>Instructions</h3>
+                <h3 style={{ marginBottom: '12px' }}>Instructions</h3>
                 <ol style={{ paddingLeft: '20px' }}>
                   {recipeDetail.instructions.map((step, i) => (
-                    <li key={i} style={{ marginBottom: '8px', lineHeight: '1.6' }}>{step}</li>
+                    <li key={i} style={{ marginBottom: '10px', fontSize: '14px', lineHeight: '1.6' }}>{step}</li>
                   ))}
                 </ol>
               </div>

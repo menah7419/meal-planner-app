@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import API_BASE from '../services/api';
+import './MealPlanPage.css';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const MEALS = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
@@ -29,47 +28,55 @@ function MealPlanPage() {
   }
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '40px auto', padding: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>NutriPlan</h1>
-        <button onClick={() => navigate('/dashboard')} style={{ padding: '8px 16px' }}>← Dashboard</button>
+    <div>
+      <div className="header">
+        <h1>🌿 NutriPlan</h1>
+        <button onClick={() => navigate('/dashboard')}>← Dashboard</button>
       </div>
-      <h2>🍽️ My Meal Plan</h2>
-      <p>Click any cell to add a meal!</p>
 
-      <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
-          <thead>
-            <tr>
-              <th style={{ border: '1px solid #ddd', padding: '10px', background: '#f2f2f2' }}>Meal</th>
-              {DAYS.map(day => (
-                <th key={day} style={{ border: '1px solid #ddd', padding: '10px', background: '#f2f2f2' }}>{day}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {MEALS.map(meal => (
-              <tr key={meal}>
-                <td style={{ border: '1px solid #ddd', padding: '10px', fontWeight: 'bold', background: '#f9f9f9' }}>{meal}</td>
-                {DAYS.map(day => (
-                  <td key={day} onClick={() => handleCellClick(day, meal)}
-                    style={{ border: '1px solid #ddd', padding: '10px', cursor: 'pointer',
-                      minWidth: '100px', background: plan[`${day}-${meal}`] ? '#e8f5e9' : 'white' }}>
-                    {editing === `${day}-${meal}` ? (
-                      <div>
-                        <input value={inputValue} onChange={e => setInputValue(e.target.value)}
-                          style={{ width: '90%', padding: '4px' }} autoFocus />
-                        <button onClick={() => handleSave(day, meal)} style={{ marginTop: '4px', padding: '2px 8px' }}>Save</button>
-                      </div>
-                    ) : (
-                      <span>{plan[`${day}-${meal}`] || '+'}</span>
-                    )}
-                  </td>
-                ))}
+      <div className="mealplan-container">
+        <h2 style={{ marginBottom: '8px' }}>🍽️ My Meal Plan</h2>
+        <p style={{ color: '#666', marginBottom: '24px' }}>Click any cell to add a meal!</p>
+
+        <div className="mealplan-table-wrapper">
+          <table className="mealplan-table">
+            <thead>
+              <tr>
+                <th>Meal</th>
+                {DAYS.map(day => <th key={day}>{day}</th>)}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {MEALS.map(meal => (
+                <tr key={meal}>
+                  <td className="mealplan-meal-label">{meal}</td>
+                  {DAYS.map(day => (
+                    <td key={day}
+                      className={plan[`${day}-${meal}`] ? 'mealplan-cell-filled' : ''}
+                      onClick={() => handleCellClick(day, meal)}>
+                      <div className="mealplan-cell">
+                        {editing === `${day}-${meal}` ? (
+                          <div onClick={e => e.stopPropagation()} style={{ width: '100%' }}>
+                            <input className="mealplan-input" value={inputValue}
+                              onChange={e => setInputValue(e.target.value)}
+                              autoFocus
+                              onKeyDown={e => e.key === 'Enter' && handleSave(day, meal)} />
+                            <button className="mealplan-save-btn"
+                              onClick={() => handleSave(day, meal)}>Save</button>
+                          </div>
+                        ) : (
+                          <span className={plan[`${day}-${meal}`] ? 'mealplan-cell-text' : 'mealplan-cell-empty'}>
+                            {plan[`${day}-${meal}`] || '+'}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
