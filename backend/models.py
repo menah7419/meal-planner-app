@@ -31,9 +31,9 @@ class MealPlanEntry(db.Model):
     __tablename__ = 'meal_plan_entries'
     id = db.Column(db.Integer, primary_key=True)
     meal_plan_id = db.Column(db.Integer, db.ForeignKey('meal_plans.id'), nullable=False)
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
     entry_date = db.Column(db.Date, nullable=False)
     meal_type = db.Column(db.String(20), nullable=False)
+    recipe_name = db.Column(db.String(150))
 
 class CommunityPost(db.Model):
     __tablename__ = 'community_posts'
